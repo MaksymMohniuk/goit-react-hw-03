@@ -1,5 +1,9 @@
-const SearchBox = () => {
-  return <div>SearchBox</div>;
+const SearchBox = ({ filter, onChangeFilter }) => {
+  return (
+    <div>
+      <input type="text" value={filter} onChange={onChangeFilter} />
+    </div>
+  );
 };
 
 export default SearchBox;
