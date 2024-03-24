@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { nanoid } from "nanoid";
 import "./App.css";
 import ContactForm from "./components/ContactForm/ContactForm.jsx";
@@ -12,12 +12,32 @@ function App() {
     { id: "id-3", name: "Eden Clements", number: "645-17-79" },
     { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
   ];
-  const [contacts, setContacts] = useState(initialContacts);
+  const [contacts, setContacts] = useState(() => {
+    const stringifiedContacts = localStorage.getItem("contacts");
+    if (!stringifiedContacts) return initialContacts;
+    const parsedContacts = JSON.parse(stringifiedContacts);
+    return parsedContacts;
+  });
   const [filter, setFilter] = useState("");
 
+  useEffect(() => {
+    localStorage.setItem("contacts", JSON.stringify(contacts));
+  }, [contacts]);
+
   const addContact = (formData) => {
-    const finalContact = { ...formData, id: nanoid() };
+    const { contactName, contactNumber } = formData;
+    const finalContact = {
+      id: nanoid(),
+      name: contactName,
+      number: contactNumber,
+    };
     setContacts((prevState) => [...prevState, finalContact]);
+  };
+
+  const deleteContact = (contactId) => {
+    setContacts((prevContacts) =>
+      prevContacts.filter((contact) => contact.id !== contactId)
+    );
   };
 
   const onChangeFilter = (e) => {
@@ -34,10 +54,13 @@ function App() {
   return (
     <>
       <div>
-        <h1>Phonebook</h1>
+        <h1 className="title">Phonebook</h1>
         <ContactForm addContact={addContact} />
         <SearchBox filter={filter} onChangeFilter={onChangeFilter} />
-        <ContactList contacts={filteredContacts} />
+        <ContactList
+          contacts={filteredContacts}
+          deleteContact={deleteContact}
+        />
       </div>
     </>
   );

@@ -1,7 +1,14 @@
+import styles from "./SearchBox.module.css";
+
 const SearchBox = ({ filter, onChangeFilter }) => {
   return (
-    <div>
-      <input type="text" value={filter} onChange={onChangeFilter} />
+    <div className={styles.searchBoxContainer}>
+      <input
+        type="text"
+        value={filter}
+        onChange={onChangeFilter}
+        className={styles.searchInput}
+      />
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
+import styles from "./ContactForm.module.css";
 
 const contactFormScheme = Yup.object().shape({
   contactName: Yup.string()
@@ -22,25 +23,36 @@ const ContactForm = ({ addContact }) => {
     addContact(values);
     actions.resetForm();
   };
+
   return (
-    <div>
+    <div className={styles.contactForm}>
       <Formik
         initialValues={FORM_INITIAL_VALUES}
-        validationScheme={contactFormScheme}
+        validationSchema={contactFormScheme}
         onSubmit={handleSubmit}
       >
         <Form>
-          <label>
-            <span>Name</span>
-            <Field type="text" name="contactName"></Field>
-            <ErrorMessage component="p" name="contactName" />
-          </label>
-          <label>
-            <span>Number</span>
-            <Field type="text" name="contactNumber"></Field>
-            <ErrorMessage component="p" name="contactNumber" />
-          </label>
-          <button type="submit">Add contact</button>
+          <div className={styles.formGroup}>
+            <label htmlFor="contactName">Name</label>
+            <Field type="text" id="contactName" name="contactName" />
+            <ErrorMessage
+              component="p"
+              name="contactName"
+              className={styles.error}
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="contactNumber">Number</label>
+            <Field type="text" id="contactNumber" name="contactNumber" />
+            <ErrorMessage
+              component="p"
+              name="contactNumber"
+              className={styles.error}
+            />
+          </div>
+          <button type="submit" className={styles.submitButton}>
+            Add contact
+          </button>
         </Form>
       </Formik>
     </div>
